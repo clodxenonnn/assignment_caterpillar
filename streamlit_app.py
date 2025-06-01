@@ -12,7 +12,7 @@ from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfigurati
 st.set_page_config(layout="wide")
 
 # Google Drive file ID for YOLO model trained on caterpillars
-file_id = "1oHLmjRhWXaA-meKxxZlD2CLJ97I5719R"  # Make sure this is the caterpillar model
+file_id = "1pBjHFW2l1FvpJTUGjTtLKRpqf92VRXx8"  # Make sure this is the caterpillar model
 model_path = "best.pt"
 
 # Download the model if it doesn't exist

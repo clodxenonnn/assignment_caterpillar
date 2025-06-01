@@ -18,7 +18,9 @@ model_path = "best.pt"
 # Download the model if it doesn't exist
 if not os.path.exists(model_path):
     with st.spinner("Downloading model..."):
-        gdown.download(f"https://drive.google.com/uc?id={file_id}", model_path, quiet=False)
+        url = "https://drive.google.com/uc?export=download&id=1oHLmjRhWXaA-meKxxZlD2CLJ97I5719R"
+        gdown.download(url, model_path, fuzzy=True, quiet=False)
+
 
 # Load YOLO model
 model = YOLO(model_path)

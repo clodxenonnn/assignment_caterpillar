@@ -7,6 +7,9 @@ import numpy as np
 import av
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
 
+# Set page config to use wide layout
+st.set_page_config(layout="wide")
+
 # Download YOLO model if not present
 file_id = "1QJNq5JCLfoex6NcpoW-nTtTaBrwxbbpM"
 model_path = "best.pt"

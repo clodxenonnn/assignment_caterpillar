@@ -5,8 +5,7 @@ from PIL import Image
 from ultralytics import YOLO
 import numpy as np
 
-# Set page config to use wide layout
-st.set_page_config(layout="wide")
+
 
 # Google Drive file ID for YOLO model trained on caterpillars
 file_id = "1oHLmjRhWXaA-meKxxZlD2CLJ97I5719R"  # Make sure this is the caterpillar model

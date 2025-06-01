@@ -1,1 +1,13 @@
 streamlit
+ultralytics
+Pillow
+opencv-python-headless
+gdown
+numpy
+streamlit-webrtc
+av
+gdown
+
+
+
+

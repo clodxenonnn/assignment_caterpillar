@@ -35,7 +35,7 @@ img_file_buffer = st.camera_input("Take a picture using your webcam")
 if img_file_buffer is not None:
     # Read and display the captured image
     image = Image.open(img_file_buffer)
-    st.image(image, caption="Captured Image", use_column_width=True)
+    st.image(image, caption="Captured Image", use_container_width=True)
 
     # Convert to NumPy array
     img_np = np.array(image.convert("RGB"))
@@ -44,7 +44,7 @@ if img_file_buffer is not None:
     results = model(img_np)
 
     # Display result
-    st.image(results[0].plot(), caption="Detection Result", use_column_width=True)
+    st.image(results[0].plot(), caption="Detection Result", use_container_width=True)
 
 # SECTION 2: Offline image upload
 st.subheader("🖼️ Upload an Image for Caterpillar Detection")
@@ -53,7 +53,7 @@ uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 if uploaded_file is not None:
     # Open and display the uploaded image
     img = Image.open(uploaded_file)
-    st.image(img, caption="Uploaded Image", use_column_width=True)
+    st.image(img, caption="Uploaded Image", use_container_width=True)
 
     # Convert to NumPy array
     img_np = np.array(img.convert("RGB"))
@@ -62,4 +62,4 @@ if uploaded_file is not None:
     results = model(img_np)
 
     # Display result
-    st.image(results[0].plot(), caption="Detected Image", use_column_width=True)
+    st.image(results[0].plot(), caption="Detected Image", use_container_width=True)

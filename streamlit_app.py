@@ -4,23 +4,60 @@ import gdown
 from PIL import Image
 from ultralytics import YOLO
 import numpy as np
+import av
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
 
-
-
-# Google Drive file ID for YOLO model trained on caterpillars
-file_id = "1oHLmjRhWXaA-meKxxZlD2CLJ97I5719R"  # Make sure this is the caterpillar model
+# Download YOLO model if not present
+file_id = "1QJNq5JCLfoex6NcpoW-nTtTaBrwxbbpM"
 model_path = "best.pt"
 
-# Download the model if it doesn't exist
 if not os.path.exists(model_path):
-    with st.spinner("Downloading model..."):
+    with st.spinner("Downloading YOLO model..."):
         gdown.download(f"https://drive.google.com/uc?id={file_id}", model_path, quiet=False)
 
 # Load YOLO model
 model = YOLO(model_path)
+yolo_classes = model.names  # Dictionary of class_id -> class_name
 
-# Title for the app
+st.set_page_config(layout="wide")
 st.title("🐛 Caterpillar Detection with YOLO")
+
+# --- SECTION 3: Live Webcam Detection (WebRTC) ---
+st.subheader("🎥 Live Webcam Detection (WebRTC)")
+
+RTC_CONFIGURATION = RTCConfiguration(
+    {
+        "iceServers": [
+            {"urls": ["stun:stun.l.google.com:19302"]},
+            {
+                "urls": ["turn:openrelay.metered.ca:80", "turn:openrelay.metered.ca:443"],
+                "username": "openrelayproject",
+                "credential": "openrelayproject",
+            },
+        ]
+    }
+)
+
+class YOLOVideoProcessor(VideoProcessorBase):
+    def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
+        img = frame.to_ndarray(format="bgr24")
+        results = model(img)[0]
+        annotated_frame = results.plot()
+        return av.VideoFrame.from_ndarray(annotated_frame, format="bgr24")
+
+# Single call to webrtc_streamer — user must click 'Start' button manually
+webrtc_ctx = webrtc_streamer(
+    key="live-dog-detection",
+    video_processor_factory=YOLOVideoProcessor,
+    rtc_configuration=RTC_CONFIGURATION,
+    media_stream_constraints={"video": True, "audio": False},
+    async_processing=True,
+)
+
+if webrtc_ctx.state.playing:
+    st.markdown("📡 **Streaming live video and detecting objects in real-time...**")
+else:
+    st.info("📷 Please click the **Start** button above to activate your webcam.")
 
 # --- SECTION 1: Snapshot Detection (st.camera_input) ---
 st.subheader("📸 Detect Caterpillars from Your Camera (Snapshot)")
@@ -50,8 +87,4 @@ if uploaded_file is not None:
 
     results = model(img_np)
 
-    st.image(results[0].plot(), caption="Detected Image", use_column_width=True)
-    results = model(img_np)
-
-    # Display result
     st.image(results[0].plot(), caption="Detected Image", use_column_width=True)

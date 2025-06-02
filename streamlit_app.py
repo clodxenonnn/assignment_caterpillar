@@ -5,61 +5,72 @@ from PIL import Image
 from ultralytics import YOLO
 import numpy as np
 import av
-from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
 
+# PAGE SETUP
+st.set_page_config(page_title="Caterpillar Detection", layout="wide")
+st.title("🐛 Caterpillar Detection using YOLOv8")
 
-# Set page config to use wide layout
-st.set_page_config(layout="wide")
-
-# Google Drive file ID for YOLO model trained on caterpillars
-file_id = "1bSUm1mJSnqEOMZ6IEpLLJTLgG9lToqIq"  # Make sure this is the caterpillar model
+# MODEL DOWNLOAD
+file_id = "1bSUm1mJSnqEOMZ6IEpLLJTLgG9lToqIq"  # Replace with your own file ID if needed
 model_path = "best.pt"
 
-# Download the model if it doesn't exist
 if not os.path.exists(model_path):
-    with st.spinner("Downloading model..."):
+    with st.spinner("Downloading YOLO model..."):
         gdown.download(f"https://drive.google.com/uc?id={file_id}", model_path, quiet=False)
 
-# Load YOLO model
+# LOAD MODEL
 model = YOLO(model_path)
 
-# Title for the app
-st.title("🐛 Caterpillar Detection with YOLO")
+# SIDEBAR OPTIONS
+st.sidebar.title("🛠️ Detection Settings")
+confidence = st.sidebar.slider("Detection Confidence", 0.0, 1.0, 0.25)
+use_realtime = st.sidebar.checkbox("Use Real-Time Webcam", value=False)
+use_snapshot = st.sidebar.checkbox("Use Snapshot Camera", value=True)
 
-# SECTION 1: Real-time snapshot capture using st.camera_input()
-st.subheader("📸 Detect Caterpillars from Your Camera (Snapshot)")
+# ------------------ SNAPSHOT CAMERA INPUT ------------------
+if use_snapshot:
+    st.subheader("📸 Detect from Snapshot (st.camera_input)")
 
-# Camera input (replaces streamlit-webrtc)
-img_file_buffer = st.camera_input("Take a picture using your webcam")
+    img_file_buffer = st.camera_input("Take a picture using your webcam")
+    if img_file_buffer is not None:
+        image = Image.open(img_file_buffer)
+        st.image(image, caption="Captured Image", use_container_width=True)
+        img_np = np.array(image.convert("RGB"))
 
-if img_file_buffer is not None:
-    # Read and display the captured image
-    image = Image.open(img_file_buffer)
-    st.image(image, caption="Captured Image", use_container_width=True)
+        # Inference
+        results = model.predict(img_np, conf=confidence)
+        st.image(results[0].plot(), caption="Detection Result", use_container_width=True)
 
-    # Convert to NumPy array
-    img_np = np.array(image.convert("RGB"))
-
-    # Run YOLO detection
-    results = model(img_np)
-
-    # Display result
-    st.image(results[0].plot(), caption="Detection Result", use_container_width=True)
-
-# SECTION 2: Offline image upload
+# ------------------ FILE UPLOAD INPUT ------------------
 st.subheader("🖼️ Upload an Image for Caterpillar Detection")
-uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
+uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 if uploaded_file is not None:
-    # Open and display the uploaded image
     img = Image.open(uploaded_file)
     st.image(img, caption="Uploaded Image", use_container_width=True)
-
-    # Convert to NumPy array
     img_np = np.array(img.convert("RGB"))
 
-    # Run YOLO detection
-    results = model(img_np)
-
-    # Display result
+    results = model.predict(img_np, conf=confidence)
     st.image(results[0].plot(), caption="Detected Image", use_container_width=True)
+
+# ------------------ REAL-TIME WEBCAM STREAM ------------------
+if use_realtime:
+    st.subheader("🎥 Real-Time Webcam Detection (streamlit-webrtc)")
+
+    class YOLOVideoProcessor(VideoProcessorBase):
+        def __init__(self):
+            self.model = model
+            self.confidence = confidence
+
+        def recv(self, frame):
+            img = frame.to_ndarray(format="bgr24")
+            results = self.model.predict(img, conf=self.confidence)
+            return av.VideoFrame.from_ndarray(results[0].plot(), format="bgr24")
+
+    webrtc_streamer(
+        key="realtime",
+        video_processor_factory=YOLOVideoProcessor,
+        media_stream_constraints={"video": True, "audio": False},
+        async_processing=True
+    )

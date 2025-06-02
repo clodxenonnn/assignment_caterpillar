@@ -68,13 +68,12 @@ if use_realtime:
             results = self.model.predict(img, conf=self.confidence)
             return av.VideoFrame.from_ndarray(results[0].plot(), format="bgr24")
 
-webrtc_streamer(
-    key="switchable_cam",
-    video_processor_factory=YOLOVideoProcessor,
-    media_stream_constraints={
-        "video": {
-            "facingMode": "environment"  # 👈 Switches to back camera (when supported)
-        },
+    webrtc_streamer(
+        key="realtime",
+        video_processor_factory=YOLOVideoProcessor,
+        media_stream_constraints={"video": True, "audio": False},
+        async_processing=True
+    )
         "audio": False,
     },
     async_processing=True

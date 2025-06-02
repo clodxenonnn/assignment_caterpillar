@@ -23,7 +23,7 @@ if not os.path.exists(model_path):
 model = YOLO(model_path)
 
 # SIDEBAR OPTIONS
-st.sidebar.title("🛠️ Detection Settings"))
+st.sidebar.title("🛠️ Detection Settings")
 use_realtime = st.sidebar.checkbox("Use Real-Time Webcam", value=False)
 use_snapshot = st.sidebar.checkbox("Use Snapshot Camera", value=True)
 

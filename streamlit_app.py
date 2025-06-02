@@ -74,7 +74,3 @@ if use_realtime:
         media_stream_constraints={"video": True, "audio": False},
         async_processing=True
     )
-        "audio": False,
-    },
-    async_processing=True
-)

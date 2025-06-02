@@ -13,7 +13,7 @@ st.title("🐛 Caterpillar Detection using YOLOv8")
 
 # MODEL DOWNLOAD
 file_id = "1bSUm1mJSnqEOMZ6IEpLLJTLgG9lToqIq"  # Replace with your own file ID if needed
-model_path = "best.pt"12
+model_path = "best.pt"
 
 if not os.path.exists(model_path):
     with st.spinner("Downloading YOLO model..."):

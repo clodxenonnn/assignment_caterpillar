@@ -9,7 +9,7 @@ from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
 
 # PAGE SETUP
 st.set_page_config(page_title="Caterpillar Detection", layout="wide")
-st.title("🐛 Caterpillar Detection using YOLOv8")
+st.title("🐛 Caterpillar Detection using YOLO")
 st.caption("PROJECT CAO SECTION 3 GROUP 4. Members: Angelina Goh, Lee Siew Shuen, Ching Li Ban, Oliver Wong, Tan De Hang")
 
 # MODEL DOWNLOAD
@@ -25,7 +25,7 @@ model = YOLO(model_path)
 
 # SIDEBAR OPTIONS
 st.sidebar.title("🛠️ Detection Settings")
-confidence = st.sidebar.slider("Detection Confidence", 0.0, 1.0, 0.25)
+confidence = st.sidebar.slider("Detection Confidence", 0.0, 0.25)
 use_realtime = st.sidebar.checkbox("Use Real-Time Webcam", value=False)
 use_snapshot = st.sidebar.checkbox("Use Snapshot Camera", value=True)
 

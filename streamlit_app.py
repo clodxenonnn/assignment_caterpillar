@@ -43,17 +43,7 @@ if use_snapshot:
         results = model.predict(img_np, conf=confidence)
         st.image(results[0].plot(), caption="Detection Result", use_container_width=True)
 
-# ------------------ FILE UPLOAD INPUT ------------------
-st.subheader("🖼️ Upload an Image for Caterpillar Detection")
 
-uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
-if uploaded_file is not None:
-    img = Image.open(uploaded_file)
-    st.image(img, caption="Uploaded Image", use_container_width=True)
-    img_np = np.array(img.convert("RGB"))
-
-    results = model.predict(img_np, conf=confidence)
-    st.image(results[0].plot(), caption="Detected Image", use_container_width=True)
 
 # ------------------ REAL-TIME WEBCAM STREAM ------------------
 if use_realtime:
@@ -75,3 +65,16 @@ if use_realtime:
         media_stream_constraints={"video": True, "audio": False},
         async_processing=True
     )
+
+
+# ------------------ FILE UPLOAD INPUT ------------------
+st.subheader("🖼️ Upload an Image for Caterpillar Detection")
+
+uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
+if uploaded_file is not None:
+    img = Image.open(uploaded_file)
+    st.image(img, caption="Uploaded Image", use_container_width=True)
+    img_np = np.array(img.convert("RGB"))
+
+    results = model.predict(img_np, conf=confidence)
+    st.image(results[0].plot(), caption="Detected Image", use_container_width=True)

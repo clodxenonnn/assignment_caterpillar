@@ -25,7 +25,7 @@ model = YOLO(model_path)
 
 # SIDEBAR OPTIONS
 st.sidebar.title("🛠️ Detection Settings")
-confidence = st.sidebar.slider("Detection Confidence", 0.0, 0.25)
+#confidence = st.sidebar.slider("Detection Confidence", 0.0, 0.25)
 use_realtime = st.sidebar.checkbox("Use Real-Time Webcam", value=False)
 use_snapshot = st.sidebar.checkbox("Use Snapshot Camera", value=True)
 

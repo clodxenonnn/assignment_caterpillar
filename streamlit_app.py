@@ -10,6 +10,7 @@ from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
 # PAGE SETUP
 st.set_page_config(page_title="Caterpillar Detection", layout="wide")
 st.title("🐛 Caterpillar Detection using YOLOv8")
+st.caption("Built by CAO SECTION 3 GROUP 4")
 
 # MODEL DOWNLOAD
 file_id = "1bSUm1mJSnqEOMZ6IEpLLJTLgG9lToqIq"  # Replace with your own file ID if needed
@@ -30,7 +31,7 @@ use_snapshot = st.sidebar.checkbox("Use Snapshot Camera", value=True)
 
 # ------------------ SNAPSHOT CAMERA INPUT ------------------
 if use_snapshot:
-    st.subheader("📸 Detect from Snapshot (st.camera_input)")
+    st.subheader("📸 Detect from Snapshot (Camera)")
 
     img_file_buffer = st.camera_input("Take a picture using your webcam")
     if img_file_buffer is not None:
@@ -56,7 +57,7 @@ if uploaded_file is not None:
 
 # ------------------ REAL-TIME WEBCAM STREAM ------------------
 if use_realtime:
-    st.subheader("🎥 Real-Time Webcam Detection (streamlit-webrtc)")
+    st.subheader("🎥 Real-Time Webcam Detection")
 
     class YOLOVideoProcessor(VideoProcessorBase):
         def __init__(self):

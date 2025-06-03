@@ -10,7 +10,7 @@ from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
 # PAGE SETUP
 st.set_page_config(page_title="Caterpillar Detection", layout="wide")
 st.title("🐛 Caterpillar Detection using YOLO")
-st.caption("PROJECT CAO SECTION 3 GROUP 4. Members: Angelina Goh, Lee Siew Shuen, Ching Li Ban, Oliver Wong, Tan De Hang")
+st.caption("PROJECT CAO SECTION 3 GROUP 4.")
 
 # MODEL DOWNLOAD
 file_id = "1bSUm1mJSnqEOMZ6IEpLLJTLgG9lToqIq"  # Replace with your own file ID if needed

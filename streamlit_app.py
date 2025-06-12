@@ -13,7 +13,7 @@ st.title("🐛 Caterpillar Detection using YOLO")
 st.caption("PROJECT CAO SECTION 3 GROUP 4.")
 
 # MODEL DOWNLOAD
-file_id = "1bSUm1mJSnqEOMZ6IEpLLJTLgG9lToqIq"  # Replace with your own file ID if needed
+file_id = "13NXnfghkQBeUoMrXkyouoBASi9yJUoF4"  # Replace with your own file ID if needed
 model_path = "best.pt"
 
 if not os.path.exists(model_path):
